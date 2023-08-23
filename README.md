@@ -1,1 +1,1 @@
-# adversarial-purification-for-MRI
+# Adversarial-purification-for-MRI
