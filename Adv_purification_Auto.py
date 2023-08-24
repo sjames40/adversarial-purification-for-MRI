@@ -20,7 +20,7 @@ import importlib
 import argparse
 import sigpy.mri as mr
 import os
-import two_channel_dataset_DIP
+import global_network_dataset2
 
 device = torch.device("cuda:0")
 
@@ -227,7 +227,7 @@ state = restore_checkpoint(ckpt_filename, state, device, skip_sigma=True)
 ema.copy_to(score_model.parameters())
 
 
-for train_direct,train_target,train_smap,train_mask,mask_2,A_I,train_kspace in two_channel_dataset_DIP.train_loader:
+for train_direct,train_target,train_smap,train_mask,mask_2,A_I,train_kspace in global_network_dataset2.train_loader:
     ksp = (train_kspace[:,:, 0, :, :] + 1j * train_kspace[:,:, 1, :, :]).to(device)
     mps2 = (train_smap[:,:, 0, :, :] + 1j *train_smap[:,:, 1, :, :]).to(device)
     train_input = train_direct.to(device).float()
