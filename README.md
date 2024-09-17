@@ -1,4 +1,23 @@
 # Diffusion-based Adversarial Purification for Robust Deep MRI Reconstruction
 
 ## Brief explanation of the inference procedure
-The primary process will composed of the two processes, the purification process which uses the code adv_purification and the dataset can be accessed on the dropbox 
+The primary workflow consists of two key stages: first, the purification process, implemented using the adv_purification code, followed by training the MoDL network to further refine the reconstructed output.
+
+2 Install the required dependencies:
+mkdir weights
+wget -O weights/checkpoint_95.pth https://www.dropbox.com/s/27gtxkmh2dlkho9/checkpoint_95.pth?dl=0
+
+# create env and activate
+conda create -n score-POCS python=3.8
+conda activate score-POCS
+
+# install dependencies
+conda install pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch
+pip install -r requirements.txt
+
+3 Usage Download the dataset from Dropbox: Data avaliable on **https://www.dropbox.com/scl/fi/801dxovhbkp2bkl2krz5x/NEW_KSPACE.zip?rlkey=4u3b32f6c4pfujsv3kp7z5bdk&st=hwe9thrv&dl=0**
+Open and run the self_guided_DIP.ipynb Jupyter notebook to train and evaluate the model on image restoration tasks.
+Directory Structure
+models/: Contains model architecture code which have the DIDN network and the score based MRI model network
+autoattack/: Implementation of the auto attack algorithom.
+utils/: Utility functions for the project.
