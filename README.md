@@ -16,7 +16,12 @@ conda install pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch
 pip install -r requirements.txt
 
 3 Usage Download the dataset from Dropbox: Data avaliable on **https://www.dropbox.com/scl/fi/801dxovhbkp2bkl2krz5x/NEW_KSPACE.zip?rlkey=4u3b32f6c4pfujsv3kp7z5bdk&st=hwe9thrv&dl=0**
-Open and run the self_guided_DIP.ipynb Jupyter notebook to train and evaluate the model on image restoration tasks.
+
+Open and run the adv_purification.py to have the purification result for the initial stage and evaluate the model on image restoration tasks based on the pretrained MoDL model and run th test case result.
+
+The pretraind MoDL is also on the dropbox.
+
+
 Directory Structure
 models/: Contains model architecture code which have the DIDN network and the score based MRI model network
 autoattack/: Implementation of the auto attack algorithom.
