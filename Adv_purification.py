@@ -90,7 +90,7 @@ elif schedule == 'linear':
 else:
     NotImplementedError(f"Given schedule {schedule} not implemented yet!")
 
-netG = torch.load(os.path.join(aim,'Newproject','DIDN_global_model_142iteration_3res_6iter.pt')).cpu()
+netG = torch.load(os.path.join(aim,'DIDN_lambda1_3000_images_trained.pt')).cpu()
 ckpt_filename = f"/home/shijunliang/SDF_data/score-MRI-main/weights/checkpoint_95.pth"
 sde = VESDE(sigma_min=config.model.sigma_min, sigma_max=config.model.sigma_max, N=N)
 
