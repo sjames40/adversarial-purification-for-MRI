@@ -71,7 +71,7 @@ def data_fidelity(mask, x, Fy):
     return x
 
 
-N = 70
+N = 200
 m = 1
 fname = 1
 
@@ -303,7 +303,7 @@ def Recon2(cg_iter, smap, mask, input):
     output_CG = input
     for i in range(cg_iter):
         output_NN = netG(output_CG)
-        output_CG = CG(output_NN, tol=0.0001, L=5, smap=smap, mask=mask, alised_image=input)
+        output_CG = CG(output_NN, tol=0.0001, L=3, smap=smap, mask=mask, alised_image=input)
     return output_CG
 
 
