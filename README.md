@@ -25,7 +25,7 @@ Usage Download the dataset can be found from Dropbox: Data avaliable on https://
 
 Open and run the adv_purification.py to have the purification result for the initial stage and evaluate the model on image restoration tasks based on the pretrained MoDL model and run th test case result.
 
-The pretraind MoDL is also on the dropbox https://www.dropbox.com/scl/fi/xnlrcexczb8yr3neshj1b/DIDN_lambda1_3000_images_trained_2.pt?rlkey=icrqens0ltzvtjusxyzuck89s&st=315c00yp&dl=0
+The pretraind MoDL is also on the dropbox [https://www.dropbox.com/scl/fi/xnlrcexczb8yr3neshj1b/DIDN_lambda1_3000_images_trained_2.pt?rlkey=icrqens0ltzvtjusxyzuck89s&st=315c00yp&dl=0](https://www.dropbox.com/scl/fi/lflq0fkjn5hjif1y6tdls/DIDN_lambda1_3000_images_trained.pt?rlkey=4e6tv4r5w0a5gxhbmndw5fjcs&st=i4w0j52y&dl=0)
 
 The pretrained diffusion model can also be found in the dropbox link https://www.dropbox.com/s/27gtxkmh2dlkho9/checkpoint_95.pth?dl=0. Please note the pre-trained model was adopted from: https://arxiv.org/pdf/2110.05243
 
