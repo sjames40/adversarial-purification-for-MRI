@@ -139,3 +139,7 @@ class nyumultidataset(Dataset): # model data loader
        
     def __len__(self):
         return len(self.A_paths)
+train_dataset = nyumultidataset(kspace_data, mask_data, mask_data_real)
+train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=1,shuffle=False)
+test_dataset = nyumultidataset(test_kspace_data, test_mask_data, test_mask_data_real)
+test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=1,shuffle=False)
