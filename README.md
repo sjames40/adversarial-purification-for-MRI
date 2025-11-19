@@ -29,7 +29,7 @@ The pretraind MoDL is also on the dropbox [https://www.dropbox.com/scl/fi/xnlrce
 
 The pretrained diffusion model can also be found in the dropbox link https://www.dropbox.com/s/27gtxkmh2dlkho9/checkpoint_95.pth?dl=0. Please note the pre-trained model was adopted from: https://arxiv.org/pdf/2110.05243
 
-The pretraind diffusion model for DDS can be found in the 
+if you want to gain the faster MRI reconstruction purification, we will recommond you to follow DDS https://github.com/hyungjin-chung/DDS .The pretraind diffusion model for DDS can be found in the 
 # Download pre-trained model weights
 mkdir -p './exp/vp'
 wget -O './exp/vp/AAPM256_1M.pth' 'https://www.dropbox.com/scl/fi/hs75uqc9zgwi8en71g488/AAPM256_1M.pt?rlkey=s1otrarzz1tbr7j6nwc5rh1r6&dl=1'
