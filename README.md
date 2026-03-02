@@ -21,7 +21,7 @@ conda activate name
 conda install pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch
 
 
-Usage Download the dataset can be found from Dropbox: Data avaliable on https://www.dropbox.com/scl/fi/801dxovhbkp2bkl2krz5x/NEW_KSPACE.zip?rlkey=4u3b32f6c4pfujsv3kp7z5bdk&st=hwe9thrv&dl=0
+Usage Download the dataset can be found from: Data avaliable on https://fastmri.med.nyu.edu/
 
 Open and run the adv_purification.py to have the purification result for the initial stage and evaluate the model on image restoration tasks based on the pretrained MoDL model and run th test case result.
 
