@@ -96,29 +96,6 @@ data/
 
 ---
 
-## Directory Structure
-
-```text
-.
-├── models/                          # DIDN, NCSN++, and MRI operators
-├── util/                            # FFT, metrics, and helper functions
-├── configs/                         # Score-model configurations
-├── autoattack/                      # AutoAttack-related source code
-├── tests/                           # Core regression tests
-├── weights/                         # Pretrained and fine-tuned checkpoints
-├── global_network_dataset.py        # Multicoil NPZ loader and masks
-├── validate_reproduction_setup.py   # Data/checkpoint validation
-├── rodio_purify.py                  # Diffusion purification, Algorithms 1–2
-├── train_MoDL.py                    # MoDL pretraining/fine-tuning
-├── evaluate_purified.py             # Standalone-DP evaluation
-├── evaluate_modl.py                 # Vanilla MoDL and RODIO evaluation
-├── generate_kspace_attack.py        # Measurement-space PGD generation
-├── attacks.py                       # Differentiable attack implementation
-└── select_pst_mmd.py                # Experimental PST/MMD diagnostic
-```
-
----
-
 # Reproduction Pipeline
 
 Set the project paths before running the commands:
