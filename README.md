@@ -98,189 +98,59 @@ data/
 
 # Reproduction Pipeline
 
-Set the project paths before running the commands:
+Run commands from the repository root. Checkpoints, output directories, and
+paper settings are now defaults in the Python entry points. Set the data path
+only once when the dataset is outside this repository:
 
 ```bash
-export RODIO_ROOT=/path/to/adversarial-purification-for-MRI
-export RODIO_DATA=/path/to/data
-export RODIO_SCORE="$RODIO_ROOT/weights/checkpoint_95.pth"
-export RODIO_MODL="$RODIO_ROOT/weights/DIDN_lambda1_3000_images_trained.pt"
-export RODIO_RUNS="$RODIO_ROOT/runs"
-
-cd "$RODIO_ROOT"
-mkdir -p "$RODIO_RUNS"
+cd adversarial-purification-for-MRI
+export RODIO_DATA_ROOT=/path/to/data
 ```
+
+If the files are already under `data/NEW_KSPACE/`, the export is unnecessary.
+Command-line arguments remain available for nonstandard experiments; run any
+script with `--help` to see them.
 
 ## Step 1: Validate the setup
 
 ```bash
-python validate_reproduction_setup.py \
-  --data-root "$RODIO_DATA" \
-  --modl-checkpoint "$RODIO_MODL" \
-  --score-checkpoint "$RODIO_SCORE" \
-  --train-size 3000 \
-  --val-size 20 \
-  --test-size 64 \
-  --seed 0 \
-  --scan-files 10 \
-  --output-json "$RODIO_RUNS/setup_validation.json"
+python validate_reproduction_setup.py
 ```
 
 ## Step 2: Evaluate vanilla MoDL
 
 ```bash
-python evaluate_modl.py \
-  --data-root "$RODIO_DATA" \
-  --checkpoint "$RODIO_MODL" \
-  --checkpoint-kind vanilla \
-  --output-json "$RODIO_RUNS/eval_vanilla_clean_4x.json" \
-  --train-size 3000 \
-  --val-size 20 \
-  --test-size 64 \
-  --acceleration 4 \
-  --block-iter 6 \
-  --lambda-reg 1 \
-  --cg-tol 1e-6 \
-  --seed 0 \
-  --device cuda:0
+python evaluate_modl.py
 ```
 
-## Step 3: Generate purified training and validation examples
+## Step 3: Prepare purified examples and fine-tune MoDL
 
-Generate the 3000 purified training examples:
+```bash
+python train_rodio.py
+```
+
+## Step 4: Generate clean test purification
 
 ```bash
 python rodio_purify.py \
-  --data-root "$RODIO_DATA" \
-  --score-checkpoint "$RODIO_SCORE" \
-  --output-dir "$RODIO_RUNS/purified_train_sigmaft001_pst150" \
-  --split train \
-  --train-size 3000 \
-  --val-size 20 \
-  --test-size 64 \
-  --acceleration 4 \
-  --pst-step 150 \
-  --num-scales 500 \
-  --sigma-ft 0.01 \
-  --snr 0.16 \
-  --corrector-steps 1 \
-  --seed 0 \
-  --device cuda:0
-```
-
-Generate the 20 purified validation examples:
-
-```bash
-python rodio_purify.py \
-  --data-root "$RODIO_DATA" \
-  --score-checkpoint "$RODIO_SCORE" \
-  --output-dir "$RODIO_RUNS/purified_val_sigma001_pst150" \
-  --split val \
-  --train-size 3000 \
-  --val-size 20 \
-  --test-size 64 \
-  --acceleration 4 \
-  --pst-step 150 \
-  --num-scales 500 \
-  --noise-std 0.01 \
-  --snr 0.16 \
-  --corrector-steps 1 \
-  --seed 0 \
-  --device cuda:0
-```
-
-## Step 4: Fine-tune MoDL
-
-Initialize from the pretrained vanilla MoDL checkpoint and fine-tune on purified examples:
-
-```bash
-python train_MoDL.py \
-  --data-root "$RODIO_DATA" \
-  --checkpoints-dir "$RODIO_ROOT/weights" \
-  --name rodio_ft_sigma001_pst150 \
-  --train-size 3000 \
-  --val-size 20 \
-  --test-size 64 \
-  --batch-size 1 \
-  --num-workers 4 \
-  --epochs 20 \
-  --lr 1e-4 \
-  --lr-decay-start 10 \
-  --acceleration 4 \
-  --block-iter 6 \
-  --lambda-reg 1 \
-  --cg-tol 1e-6 \
-  --init-weights "$RODIO_MODL" \
-  --purified-dir "$RODIO_RUNS/purified_train_sigmaft001_pst150" \
-  --val-purified-dir "$RODIO_RUNS/purified_val_sigma001_pst150" \
-  --expected-sigma-ft 0.01 \
-  --expected-val-noise-std 0.01 \
-  --seed 0 \
-  --gpu-ids 0
-```
-
-The output checkpoint is:
-
-```text
-weights/rodio_ft_sigma001_pst150/vali_best.pth
-```
-
-## Step 5: Generate clean test purification
-
-```bash
-python rodio_purify.py \
-  --data-root "$RODIO_DATA" \
-  --score-checkpoint "$RODIO_SCORE" \
-  --output-dir "$RODIO_RUNS/purified_test_clean_4x_pst150" \
   --split test \
-  --train-size 3000 \
-  --val-size 20 \
-  --test-size 64 \
-  --acceleration 4 \
-  --pst-step 150 \
-  --num-scales 500 \
-  --noise-std 0 \
-  --snr 0.16 \
-  --corrector-steps 1 \
-  --seed 0 \
-  --device cuda:0
+  --output-dir runs/purified_test_clean_4x_pst150
 ```
 
-## Step 6: Evaluate RODIO
+## Step 5: Evaluate RODIO
 
 ```bash
 python evaluate_modl.py \
-  --data-root "$RODIO_DATA" \
-  --checkpoint "$RODIO_ROOT/weights/rodio_ft_sigma001_pst150/vali_best.pth" \
+  --checkpoint weights/rodio_ft_sigma001_pst150/vali_best.pth \
   --checkpoint-kind rodio_finetuned \
-  --purified-dir "$RODIO_RUNS/purified_test_clean_4x_pst150" \
-  --output-json "$RODIO_RUNS/eval_rodio_clean_4x.json" \
-  --train-size 3000 \
-  --val-size 20 \
-  --test-size 64 \
-  --acceleration 4 \
-  --noise-std 0 \
-  --block-iter 6 \
-  --lambda-reg 1 \
-  --cg-tol 1e-6 \
-  --seed 0 \
-  --device cuda:0
+  --purified-dir runs/purified_test_clean_4x_pst150 \
+  --output-json runs/eval_rodio_clean_4x.json
 ```
 
 ### Evaluate standalone diffusion purification
 
 ```bash
-python evaluate_purified.py \
-  --data-root "$RODIO_DATA" \
-  --purified-dir "$RODIO_RUNS/purified_test_clean_4x_pst150" \
-  --output-json "$RODIO_RUNS/eval_dp_clean_4x.json" \
-  --train-size 3000 \
-  --val-size 20 \
-  --test-size 64 \
-  --acceleration 4 \
-  --noise-std 0 \
-  --seed 0 \
-  --device cuda:0
+python evaluate_purified.py
 ```
 
 ---
@@ -290,26 +160,7 @@ python evaluate_purified.py \
 Generate a 30-step measurement-space PGD attack with `epsilon = 0.004`:
 
 ```bash
-python generate_kspace_attack.py \
-  --data-root "$RODIO_DATA" \
-  --checkpoint "$RODIO_MODL" \
-  --output-dir "$RODIO_RUNS/attack_test_pgd_eps0004" \
-  --split test \
-  --train-size 3000 \
-  --val-size 20 \
-  --test-size 64 \
-  --acceleration 4 \
-  --method pgd \
-  --reference clean_reconstruction \
-  --loss-domain complex \
-  --epsilon 0.004 \
-  --steps 30 \
-  --step-size 0.0013333333 \
-  --block-iter 6 \
-  --lambda-reg 1 \
-  --cg-tol 1e-6 \
-  --seed 0 \
-  --device cuda:0
+python generate_kspace_attack.py
 ```
 
 ---
