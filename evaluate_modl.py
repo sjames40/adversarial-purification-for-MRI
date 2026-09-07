@@ -16,19 +16,26 @@ from train_MoDL import load_model_weights, recon
 from util.metrics import psnr_per_sample, rmse_per_sample, ssim_per_sample
 
 
+PROJECT_ROOT = Path(__file__).resolve().parent
+DEFAULT_MODL_CHECKPOINT = (
+    PROJECT_ROOT / "weights" / "DIDN_lambda1_3000_images_trained.pt"
+)
+DEFAULT_EVAL_OUTPUT = PROJECT_ROOT / "runs" / "eval_vanilla_clean_4x.json"
+
+
 def parse_args():
     p = argparse.ArgumentParser(
         description="Evaluate vanilla MoDL, DP+MoDL, or fine-tuned RODIO."
     )
     p.add_argument("--data-root", default=str(global_network_dataset.DEFAULT_DATA_ROOT))
-    p.add_argument("--checkpoint", required=True)
+    p.add_argument("--checkpoint", default=str(DEFAULT_MODL_CHECKPOINT))
     p.add_argument(
         "--checkpoint-kind",
         choices=["vanilla", "rodio_finetuned"],
         default="vanilla",
         help="Labels the scientific method correctly; it does not change the architecture.",
     )
-    p.add_argument("--output-json", default="eval_results.json")
+    p.add_argument("--output-json", default=str(DEFAULT_EVAL_OUTPUT))
     p.add_argument("--train-size", type=int, default=3000)
     p.add_argument("--val-size", type=int, default=20)
     p.add_argument("--test-size", type=int, default=64)

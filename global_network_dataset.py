@@ -21,7 +21,12 @@ from torch.utils.data import DataLoader, Dataset
 from models import networks
 from util.util import complex_conj, complex_matmul, fft2, ifft2
 
-DEFAULT_DATA_ROOT = Path("/egr/research-slim/shared/baselines/SMUG/SMUG_journal-main/data")
+# Public, portable default. Set RODIO_DATA_ROOT once when the dataset lives
+# outside the repository; all recommended entry points inherit this value.
+PROJECT_ROOT = Path(__file__).resolve().parent
+DEFAULT_DATA_ROOT = Path(
+    os.environ.get("RODIO_DATA_ROOT", str(PROJECT_ROOT / "data"))
+).expanduser()
 DEFAULT_KSPACE_DIR = DEFAULT_DATA_ROOT / "NEW_KSPACE"
 
 

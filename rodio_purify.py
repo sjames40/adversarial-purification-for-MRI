@@ -25,6 +25,10 @@ from sde_lib import VESDE
 from utils import fft2_m, get_data_inverse_scaler, get_data_scaler, ifft2_m, restore_checkpoint
 
 
+PROJECT_ROOT = Path(__file__).resolve().parent
+DEFAULT_SCORE_CHECKPOINT = PROJECT_ROOT / "weights" / "checkpoint_95.pth"
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Generate paper-aligned RODIO Algorithm-2 purified inputs."
@@ -33,7 +37,7 @@ def parse_args():
     parser.add_argument("--output-dir", required=True)
     parser.add_argument(
         "--score-checkpoint",
-        required=True,
+        default=str(DEFAULT_SCORE_CHECKPOINT),
         help="Pretrained score-MRI checkpoint, e.g. weights/checkpoint_95.pth.",
     )
     parser.add_argument("--split", choices=["train", "val", "test"], default="train")

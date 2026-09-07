@@ -13,6 +13,14 @@ from models.didn import DIDN
 from train_MoDL import load_model_weights
 
 
+PROJECT_ROOT = Path(__file__).resolve().parent
+DEFAULT_MODL_CHECKPOINT = (
+    PROJECT_ROOT / "weights" / "DIDN_lambda1_3000_images_trained.pt"
+)
+DEFAULT_SCORE_CHECKPOINT = PROJECT_ROOT / "weights" / "checkpoint_95.pth"
+DEFAULT_OUTPUT = PROJECT_ROOT / "runs" / "setup_validation.json"
+
+
 KNOWN_SHA256 = {
     "DIDN_lambda1_3000_images_trained.pt":
         "4c1053994a0b7b6d93f342ec94ca5940f956c590f77ca3843f3ef8bc22733dc3",
@@ -31,15 +39,15 @@ def sha256_file(path: Path) -> str:
 
 def parse_args():
     p = argparse.ArgumentParser(description="Fail-fast validation for pretrained RODIO reproduction.")
-    p.add_argument("--data-root", required=True)
-    p.add_argument("--modl-checkpoint", required=True)
-    p.add_argument("--score-checkpoint", required=True)
+    p.add_argument("--data-root", default=str(global_network_dataset.DEFAULT_DATA_ROOT))
+    p.add_argument("--modl-checkpoint", default=str(DEFAULT_MODL_CHECKPOINT))
+    p.add_argument("--score-checkpoint", default=str(DEFAULT_SCORE_CHECKPOINT))
     p.add_argument("--train-size", type=int, default=3000)
     p.add_argument("--val-size", type=int, default=20)
     p.add_argument("--test-size", type=int, default=64)
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--scan-files", type=int, default=3)
-    p.add_argument("--output-json", default=None)
+    p.add_argument("--output-json", default=str(DEFAULT_OUTPUT))
     return p.parse_args()
 
 

@@ -13,11 +13,16 @@ import global_network_dataset
 from util.metrics import psnr_per_sample, rmse_per_sample, ssim_per_sample
 
 
+PROJECT_ROOT = Path(__file__).resolve().parent
+DEFAULT_PURIFIED_DIR = PROJECT_ROOT / "runs" / "purified_test_clean_4x_pst150"
+DEFAULT_OUTPUT = PROJECT_ROOT / "runs" / "eval_dp_clean_4x.json"
+
+
 def parse_args():
     p = argparse.ArgumentParser(description="Evaluate standalone Algorithm-2 DP outputs.")
-    p.add_argument("--data-root", required=True)
-    p.add_argument("--purified-dir", required=True)
-    p.add_argument("--output-json", required=True)
+    p.add_argument("--data-root", default=str(global_network_dataset.DEFAULT_DATA_ROOT))
+    p.add_argument("--purified-dir", default=str(DEFAULT_PURIFIED_DIR))
+    p.add_argument("--output-json", default=str(DEFAULT_OUTPUT))
     p.add_argument("--train-size", type=int, default=3000)
     p.add_argument("--val-size", type=int, default=20)
     p.add_argument("--test-size", type=int, default=64)
