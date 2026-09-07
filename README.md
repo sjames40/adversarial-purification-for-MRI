@@ -129,7 +129,7 @@ python evaluate_modl.py
 python train_rodio.py
 ```
 
-## Step 4: Generate clean test purification
+## Step 4: RODIO: Generate purified test results
 
 ```bash
 python rodio_purify.py \
@@ -137,7 +137,7 @@ python rodio_purify.py \
   --output-dir runs/purified_test_clean_4x_pst150
 ```
 
-## Step 5: Evaluate RODIO
+## Step 5: RODIO: Apply Fine-tuned MoDL
 
 ```bash
 python evaluate_modl.py \
